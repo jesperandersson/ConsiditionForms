@@ -1,4 +1,5 @@
 ﻿using QuickGraph;
+using QuickGraph.Algorithms;
 using QuickGraph.Graphviz;
 using System;
 using System.Collections.Generic;
@@ -16,11 +17,16 @@ namespace WindowsFormsApp1
         public Graph()
         {
         }
-
         public Graph(AdjacencyGraph<TVertex, TEdge> adjacencyGraph, Dictionary<TEdge, double> edgeCosts)
         {
             AdjacencyGraph = adjacencyGraph;
             EdgeCosts = edgeCosts;
+        }
+
+        public TryFunc<TVertex, IEnumerable<TEdge>> getAllShortestPath(TVertex start)
+        {
+            Func<TEdge, double> edgeCost = AlgorithmExtensions.GetIndexer(EdgeCosts);
+            return AdjacencyGraph.ShortestPathsDijkstra(edgeCost, start);
         }
     }
 }
