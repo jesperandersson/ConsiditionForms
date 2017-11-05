@@ -9,9 +9,10 @@ namespace WindowsFormsApp1
 {
     class CompositeEdge<TVertex> : Edge<TVertex>
     {
-        public IEnumerable<Edge<TVertex>> ComponentEdges { get; set; }
+        public IEnumerable<EdgeWithId<TVertex>> ComponentEdges { get; set; }
 
-        public CompositeEdge(TVertex source, TVertex target, IEnumerable<Edge<TVertex>> componentEdges)  : base (source, target)
+        public CompositeEdge(TVertex source, TVertex target, IEnumerable<EdgeWithId<TVertex>> componentEdges)  
+            : base (source, target)
         {
             ComponentEdges = componentEdges;
         }

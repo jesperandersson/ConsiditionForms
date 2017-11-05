@@ -106,9 +106,9 @@ namespace WindowsFormsApp1
             return graph;
         }
 
-        public static Graph<string, Edge<string>> CreateGraphWithBonusCities()
+        public static Graph<string, EdgeWithId<string>> CreateGraphWithBonusCities()
         {
-            Graph<string, Edge<string>> graph = new Graph<string, Edge<string>>();
+            Graph<string, EdgeWithId<string>> graph = new Graph<string, EdgeWithId<string>>();
 
             // Add some vertices to the graph
             string start = "Stockholm";
@@ -129,32 +129,34 @@ namespace WindowsFormsApp1
             };
             graph.BonusVertices = bonusVertices;
 
+            var walk = "Gå";
+            var plane = "Flyg";
             // Create the edges
-            graph.AddEdge(new Edge<string>("Stockholm", "London"), 190);
-            graph.AddEdge(new Edge<string>("Stockholm", "London"), 1000);
-            graph.AddEdge(new Edge<string>("Stockholm", "Moskva"), 158);
-            graph.AddEdge(new Edge<string>("Stockholm", "Istanbul"), 327);
-            graph.AddEdge(new Edge<string>("London", "Stockholm"), 190);
-            graph.AddEdge(new Edge<string>("London", "Istanbul"), 305);
-            graph.AddEdge(new Edge<string>("London", "Kairo"), 562);
-            graph.AddEdge(new Edge<string>("Moskva", "Stockholm"), 158);
-            graph.AddEdge(new Edge<string>("Moskva", "Istanbul"), 216);
-            graph.AddEdge(new Edge<string>("Moskva", "Kabul"), 411);
-            graph.AddEdge(new Edge<string>("Istanbul", "Stockholm"), 327);
-            graph.AddEdge(new Edge<string>("Istanbul", "London"), 305);
-            graph.AddEdge(new Edge<string>("Istanbul", "Moskva"), 216);
-            graph.AddEdge(new Edge<string>("Istanbul", "Kairo"), 262);
-            graph.AddEdge(new Edge<string>("Istanbul", "Kabul"), 446);
-            graph.AddEdge(new Edge<string>("Istanbul", "Dubai"), 415);
-            graph.AddEdge(new Edge<string>("Kairo", "London"), 562);
-            graph.AddEdge(new Edge<string>("Kairo", "Istanbul"), 262);
-            graph.AddEdge(new Edge<string>("Kairo", "Dubai"), 307);
-            graph.AddEdge(new Edge<string>("Kabul", "Moskva"), 411);
-            graph.AddEdge(new Edge<string>("Kabul", "Istanbul"), 446);
-            graph.AddEdge(new Edge<string>("Kabul", "Dubai"), 412);
-            graph.AddEdge(new Edge<string>("Dubai", "Istanbul"), 415);
-            graph.AddEdge(new Edge<string>("Dubai", "Kairo"), 307);
-            graph.AddEdge(new Edge<string>("Dubai", "Kabul"), 412);
+            graph.AddEdge(new EdgeWithId<string>("Stockholm", "London", plane), 190);
+            graph.AddEdge(new EdgeWithId<string>("Stockholm", "London" , walk), 1000);
+            graph.AddEdge(new EdgeWithId<string>("Stockholm", "Moskva", plane), 158);
+            graph.AddEdge(new EdgeWithId<string>("Stockholm", "Istanbul", plane), 327);
+            graph.AddEdge(new EdgeWithId<string>("London", "Stockholm", plane), 190);
+            graph.AddEdge(new EdgeWithId<string>("London", "Istanbul", plane), 305);
+            graph.AddEdge(new EdgeWithId<string>("London", "Kairo", plane), 562);
+            graph.AddEdge(new EdgeWithId<string>("Moskva", "Stockholm", plane), 158);
+            graph.AddEdge(new EdgeWithId<string>("Moskva", "Istanbul", plane), 216);
+            graph.AddEdge(new EdgeWithId<string>("Moskva", "Kabul", plane), 411);
+            graph.AddEdge(new EdgeWithId<string>("Istanbul", "Stockholm", plane), 327);
+            graph.AddEdge(new EdgeWithId<string>("Istanbul", "London", plane), 305);
+            graph.AddEdge(new EdgeWithId<string>("Istanbul", "Moskva", plane), 216);
+            graph.AddEdge(new EdgeWithId<string>("Istanbul", "Kairo", plane), 262);
+            graph.AddEdge(new EdgeWithId<string>("Istanbul", "Kabul", plane), 446);
+            graph.AddEdge(new EdgeWithId<string>("Istanbul", "Dubai", plane), 415);
+            graph.AddEdge(new EdgeWithId<string>("Kairo", "London", plane), 562);
+            graph.AddEdge(new EdgeWithId<string>("Kairo", "Istanbul", plane), 262);
+            graph.AddEdge(new EdgeWithId<string>("Kairo", "Dubai", plane), 307);
+            graph.AddEdge(new EdgeWithId<string>("Kabul", "Moskva", plane), 411);
+            graph.AddEdge(new EdgeWithId<string>("Kabul", "Istanbul", plane), 446);
+            graph.AddEdge(new EdgeWithId<string>("Kabul", "Dubai", plane), 412);
+            graph.AddEdge(new EdgeWithId<string>("Dubai", "Istanbul", plane), 415);
+            graph.AddEdge(new EdgeWithId<string>("Dubai", "Kairo", plane), 307);
+            graph.AddEdge(new EdgeWithId<string>("Dubai", "Kabul", plane), 412);
 
             graph.Start = start;
             graph.Goal = goal;

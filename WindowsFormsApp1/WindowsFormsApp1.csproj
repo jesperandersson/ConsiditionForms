@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompositeEdge.cs" />
+    <Compile Include="EdgeWithId.cs" />
     <Compile Include="FileDotEngine.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

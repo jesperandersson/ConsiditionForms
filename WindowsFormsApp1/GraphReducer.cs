@@ -9,9 +9,9 @@ namespace WindowsFormsApp1
 {
     class GraphReducer<TVertex>
     {
-        public static Graph<TVertex, Edge<TVertex>> CreateReducedGraph(Graph<TVertex, Edge<TVertex>> graph)
+        public static Graph<TVertex, CompositeEdge<TVertex>> CreateReducedGraph(Graph<TVertex, EdgeWithId<TVertex>> graph)
         {
-            var reducedGraph = new Graph<TVertex, Edge<TVertex>>();
+            var reducedGraph = new Graph<TVertex, CompositeEdge<TVertex>>();
 
             HashSet<TVertex> bonusStartDestSet = new HashSet<TVertex>(); // bonusStartDestSet = C
             // C = B + {s, d}
@@ -25,13 +25,13 @@ namespace WindowsFormsApp1
             foreach (var source in bonusStartDestSet)
             {
                 reducedGraph.AddVertex(source);
-                TryFunc<TVertex, IEnumerable<Edge<TVertex>>> tryGetPaths = graph.getAllShortestPathDijkstra(source);
+                TryFunc<TVertex, IEnumerable<EdgeWithId<TVertex>>> tryGetPaths = graph.getAllShortestPathDijkstra(source);
                 foreach (var destination in bonusStartDestSet)
                 {
                     if (source.Equals(destination))
                         continue;
 
-                    IEnumerable<Edge<TVertex>> path;
+                    IEnumerable<EdgeWithId<TVertex>> path;
                     double cost = 0;
                     if (tryGetPaths(destination, out path))
                     {

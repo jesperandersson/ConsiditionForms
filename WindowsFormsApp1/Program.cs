@@ -26,27 +26,26 @@ namespace WindowsFormsApp1
 
         public static void TestShortestPathAndDrawGraph()
         {
-            Graph<string, Edge<string>> graph = GraphCreator.CreateGraphWithBonusCities();
+            Graph<string, EdgeWithId<string>> graph = GraphCreator.CreateGraphWithBonusCities();
 
-            Graph<string, Edge<string>> reducedGraph = GraphReducer<string>.CreateReducedGraph(graph);
-            TryFunc<string, IEnumerable<Edge<string>>> tryGetPaths = reducedGraph.getAllShortestPathBellmanFord(graph.Start);
+            Graph<string, CompositeEdge<string>> reducedGraph = GraphReducer<string>.CreateReducedGraph(graph);
+            TryFunc<string, IEnumerable<CompositeEdge<string>>> tryGetPaths = reducedGraph.getAllShortestPathBellmanFord(graph.Start);
 
             string target = graph.Goal;
-            IEnumerable<Edge<string>> path;
+            IEnumerable<CompositeEdge<string>> path;
 
             if (tryGetPaths(target, out path))
             {
-                var fullPath = new List<Edge<string>>();
-                foreach (var cp in path)
+                var fullPath = new List<EdgeWithId<string>>();
+                foreach (var compPath in path)
                 {
-                    var tmp = (CompositeEdge<string>)cp;
-                    foreach (var e in tmp.ComponentEdges)
+                    foreach (var edge in compPath.ComponentEdges)
                     {
-                        fullPath.Add(e);
+                        fullPath.Add(edge);
                     }
                 }
-                GraphDrawer<string, Edge<string>> graphDrawer = new GraphDrawer<string, Edge<string>>(graph);
-                EdgeListGraph<string, Edge<string>> highlightedPath = new EdgeListGraph<string, Edge<string>>();
+                GraphDrawer<string, EdgeWithId<string>> graphDrawer = new GraphDrawer<string, EdgeWithId<string>>(graph);
+                EdgeListGraph<string, EdgeWithId<string>> highlightedPath = new EdgeListGraph<string, EdgeWithId<string>>();
                 highlightedPath.AddVerticesAndEdgeRange(fullPath);
                 graphDrawer.Path = highlightedPath;
                 graphDrawer.DrawGraph();
