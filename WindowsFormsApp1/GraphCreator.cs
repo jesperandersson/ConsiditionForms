@@ -132,6 +132,7 @@ namespace WindowsFormsApp1
             // Create the edges
             graph.AddEdge(new Edge<string>("Stockholm", "London"), 190);
             graph.AddEdge(new Edge<string>("Stockholm", "Moskva"), 158);
+            graph.AddEdge(new Edge<string>("Stockholm", "Istanbul"), 327);
             graph.AddEdge(new Edge<string>("London", "Stockholm"), 190);
             graph.AddEdge(new Edge<string>("London", "Istanbul"), 305);
             graph.AddEdge(new Edge<string>("London", "Kairo"), 562);
