@@ -14,6 +14,11 @@ namespace WindowsFormsApp1
         public AdjacencyGraph<TVertex, TEdge> AdjacencyGraph { get; set; }
         public Dictionary<TEdge, double> EdgeCosts { get; set; }
 
+        public Dictionary<TVertex, double> BonusPoints { get; set; }
+
+        public TVertex Start { get; set; }
+        public TVertex Goal { get; set; }
+
         public Graph()
         {
         }
