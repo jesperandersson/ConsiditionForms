@@ -26,13 +26,12 @@ namespace WindowsFormsApp1
 
         public static void TestShortestPathAndDrawGraph()
         {
-            Graph<string, Edge<string>> graph = GraphCreator.CreateGraphTestGeneral();
-            string sourceVertex = "A";
-            string destinationVertex = "I";
+            Graph<string, Edge<string>> graph = GraphCreator.CreateGraphWithBonusCities();
 
-            TryFunc<string, IEnumerable<Edge<string>>> tryGetPaths = graph.getAllShortestPath(sourceVertex);
+            Graph<string, Edge<string>> reducedGraph = GraphReducer<string>.CreateReducedGraph(graph);
+            TryFunc<string, IEnumerable<Edge<string>>> tryGetPaths = reducedGraph.getAllShortestPath(graph.Start);
 
-            string target = destinationVertex;
+            string target = graph.Goal;
             IEnumerable<Edge<string>> path;
             if (tryGetPaths(target, out path))
                 foreach (var edge in path)
@@ -40,7 +39,7 @@ namespace WindowsFormsApp1
 
             if (path != null)
             {
-                GraphDrawer<string, Edge<string>> graphDrawer = new GraphDrawer<string, Edge<string>>(graph);
+                GraphDrawer<string, Edge<string>> graphDrawer = new GraphDrawer<string, Edge<string>>(reducedGraph);
                 EdgeListGraph<string, Edge<string>> highlightedPath = new EdgeListGraph<string, Edge<string>>();
                 highlightedPath.AddVerticesAndEdgeRange(path);
                 graphDrawer.Path = highlightedPath;

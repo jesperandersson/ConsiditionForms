@@ -48,6 +48,7 @@ namespace WindowsFormsApp1
                     }
                     else
                     {
+                        Console.WriteLine("No path found between {0} and {1}", source.ToString(), destination.ToString());
                     }
                 }
             }

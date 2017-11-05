@@ -21,11 +21,15 @@ namespace WindowsFormsApp1
 
         public Graph()
         {
+            AdjacencyGraph = new AdjacencyGraph<TVertex, TEdge>();
+            EdgeCosts = new Dictionary<TEdge, double>();
+            BonusVertices = new Dictionary<TVertex, double>();
         }
         public Graph(AdjacencyGraph<TVertex, TEdge> adjacencyGraph, Dictionary<TEdge, double> edgeCosts)
         {
             AdjacencyGraph = adjacencyGraph;
             EdgeCosts = edgeCosts;
+            BonusVertices = new Dictionary<TVertex, double>();
         }
 
         public void AddVertex(TVertex v)

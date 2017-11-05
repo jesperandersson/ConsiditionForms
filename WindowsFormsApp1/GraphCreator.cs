@@ -111,13 +111,15 @@ namespace WindowsFormsApp1
             Graph<string, Edge<string>> graph = new Graph<string, Edge<string>>();
 
             // Add some vertices to the graph
-            graph.AddVertex("Stockholm");
+            string start = "Stockholm";
+            string goal = "Dubai";
+            graph.AddVertex(start);
             graph.AddVertex("London");
             graph.AddVertex("Moskva");
             graph.AddVertex("Istanbul");
             graph.AddVertex("Kairo");
             graph.AddVertex("Kabul");
-            graph.AddVertex("Dubai");
+            graph.AddVertex(goal);
 
             // Add bonus vertices
             Dictionary<string, double> bonusVertices = new Dictionary<string, double>
@@ -151,6 +153,9 @@ namespace WindowsFormsApp1
             graph.AddEdge(new Edge<string>("Dubai", "Istanbul"), 415);
             graph.AddEdge(new Edge<string>("Dubai", "Kairo"), 307);
             graph.AddEdge(new Edge<string>("Dubai", "Kabul"), 412);
+
+            graph.Start = start;
+            graph.Goal = goal;
 
             return graph;
         }
