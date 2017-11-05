@@ -25,7 +25,7 @@ namespace WindowsFormsApp1
             foreach (var source in bonusStartDestSet)
             {
                 reducedGraph.AddVertex(source);
-                TryFunc<TVertex, IEnumerable<Edge<TVertex>>> tryGetPaths = graph.getAllShortestPath(source);
+                TryFunc<TVertex, IEnumerable<Edge<TVertex>>> tryGetPaths = graph.getAllShortestPathDijkstra(source);
                 foreach (var destination in bonusStartDestSet)
                 {
                     if (source.Equals(destination))

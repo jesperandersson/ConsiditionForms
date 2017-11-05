@@ -29,19 +29,25 @@ namespace WindowsFormsApp1
             Graph<string, Edge<string>> graph = GraphCreator.CreateGraphWithBonusCities();
 
             Graph<string, Edge<string>> reducedGraph = GraphReducer<string>.CreateReducedGraph(graph);
-            TryFunc<string, IEnumerable<Edge<string>>> tryGetPaths = reducedGraph.getAllShortestPath(graph.Start);
+            TryFunc<string, IEnumerable<Edge<string>>> tryGetPaths = reducedGraph.getAllShortestPathBellmanFord(graph.Start);
 
             string target = graph.Goal;
             IEnumerable<Edge<string>> path;
-            if (tryGetPaths(target, out path))
-                foreach (var edge in path)
-                    Console.WriteLine(edge);
 
-            if (path != null)
+            if (tryGetPaths(target, out path))
             {
-                GraphDrawer<string, Edge<string>> graphDrawer = new GraphDrawer<string, Edge<string>>(reducedGraph);
+                var fullPath = new List<Edge<string>>();
+                foreach (var cp in path)
+                {
+                    var tmp = (CompositeEdge<string>)cp;
+                    foreach (var e in tmp.ComponentEdges)
+                    {
+                        fullPath.Add(e);
+                    }
+                }
+                GraphDrawer<string, Edge<string>> graphDrawer = new GraphDrawer<string, Edge<string>>(graph);
                 EdgeListGraph<string, Edge<string>> highlightedPath = new EdgeListGraph<string, Edge<string>>();
-                highlightedPath.AddVerticesAndEdgeRange(path);
+                highlightedPath.AddVerticesAndEdgeRange(fullPath);
                 graphDrawer.Path = highlightedPath;
                 graphDrawer.DrawGraph();
             }

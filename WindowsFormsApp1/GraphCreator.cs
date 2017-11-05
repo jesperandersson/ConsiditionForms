@@ -124,13 +124,14 @@ namespace WindowsFormsApp1
             // Add bonus vertices
             Dictionary<string, double> bonusVertices = new Dictionary<string, double>
             {
-                { "London", 100 },
-                { "Kabul", 200 }
+                { "London", 379 },
+                { "Kabul", 600 }
             };
             graph.BonusVertices = bonusVertices;
 
             // Create the edges
             graph.AddEdge(new Edge<string>("Stockholm", "London"), 190);
+            graph.AddEdge(new Edge<string>("Stockholm", "London"), 1000);
             graph.AddEdge(new Edge<string>("Stockholm", "Moskva"), 158);
             graph.AddEdge(new Edge<string>("Stockholm", "Istanbul"), 327);
             graph.AddEdge(new Edge<string>("London", "Stockholm"), 190);

@@ -43,10 +43,16 @@ namespace WindowsFormsApp1
             EdgeCosts.Add(e, cost);
         }
 
-        public TryFunc<TVertex, IEnumerable<TEdge>> getAllShortestPath(TVertex start)
+        public TryFunc<TVertex, IEnumerable<TEdge>> getAllShortestPathDijkstra(TVertex start)
         {
             Func<TEdge, double> edgeCost = AlgorithmExtensions.GetIndexer(EdgeCosts);
             return AdjacencyGraph.ShortestPathsDijkstra(edgeCost, start);
+        }
+
+        public TryFunc<TVertex, IEnumerable<TEdge>> getAllShortestPathBellmanFord(TVertex start)
+        {
+            Func<TEdge, double> edgeCost = AlgorithmExtensions.GetIndexer(EdgeCosts);
+            return AdjacencyGraph.ShortestPathsBellmanFord(edgeCost, start);
         }
     }
 }
