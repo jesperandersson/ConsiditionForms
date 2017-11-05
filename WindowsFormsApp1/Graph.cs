@@ -14,7 +14,7 @@ namespace WindowsFormsApp1
         public AdjacencyGraph<TVertex, TEdge> AdjacencyGraph { get; set; }
         public Dictionary<TEdge, double> EdgeCosts { get; set; }
 
-        public Dictionary<TVertex, double> BonusPoints { get; set; }
+        public Dictionary<TVertex, double> BonusVertices { get; set; }
 
         public TVertex Start { get; set; }
         public TVertex Goal { get; set; }
@@ -26,6 +26,17 @@ namespace WindowsFormsApp1
         {
             AdjacencyGraph = adjacencyGraph;
             EdgeCosts = edgeCosts;
+        }
+
+        public void AddVertex(TVertex v)
+        {
+            AdjacencyGraph.AddVertex(v);
+        }
+
+        public void AddEdge(TEdge e, double cost)
+        {
+            AdjacencyGraph.AddEdge(e);
+            EdgeCosts.Add(e, cost);
         }
 
         public TryFunc<TVertex, IEnumerable<TEdge>> getAllShortestPath(TVertex start)
