@@ -106,6 +106,78 @@ namespace WindowsFormsApp1
             return graph;
         }
 
+        public static Graph<string, EdgeWithId<string>> ParseGraph(string filename)
+        {
+            var bonusCityTimeCost = 1;
+            var bonusCityReward = 5;
+            Graph<string, EdgeWithId<string>> graph = new Graph<string, EdgeWithId<string>>();
+            Dictionary<string, double> bonusCities = new Dictionary<string, double>();
+
+
+            string line;
+
+            System.IO.StreamReader file = new System.IO.StreamReader(filename);
+            while ((line = file.ReadLine()) != null)
+            {
+                string type = line.Split(' ')[0];
+                string content = String.Join(" ", line.Split(' ').Skip(1).ToArray());
+
+                switch (type)
+                {
+                    case "START":
+                        graph.Start = content;
+                        graph.AddVertex(content);
+                        break;
+                    case "GOAL":
+                        graph.Goal = content;
+                        graph.AddVertex(content);
+                        break;
+                    case "CITY":
+                        graph.AddVertex(content);
+                        break;
+                    case "BONUS":
+                        var bonusVertexName = content + "_task";
+                        graph.AddVertex(bonusVertexName);
+                        bonusCities[bonusVertexName] = bonusCityReward;
+                        break;
+                    case "EDGE":
+                        string[] edgeInformation = content.Split(';');
+                        string source = edgeInformation[0];
+                        string target = edgeInformation[1];
+                        double cost = Convert.ToDouble(edgeInformation[2].Replace('.',','));
+                        string transportationMode = "Tåg";
+                        EdgeWithId<string> edge = new EdgeWithId<string>(source, target, transportationMode, cost, cost/2);
+                        graph.AddEdge(edge, edge.GetAlgorithmCost());
+                        break;
+                    default:
+                        throw new FormatException("Line is not allowed to start with: " + type);
+                }
+            }
+
+            List<EdgeWithId<string>> edges = new List<EdgeWithId<string>>(graph.AdjacencyGraph.Edges);
+
+            // Add edges to bonus vertex
+            foreach (var edge in edges)
+            {
+                foreach (var bonusCity in bonusCities)
+                {
+                    var bonusCityName = bonusCity.Key.Split('_')[0];
+                    if (edge.Target.Equals(bonusCityName))
+                    {
+                        var timeCost = edge.TimeCost + bonusCityTimeCost;
+                        var toBonusCityEdge = new EdgeWithId<string>(edge.Source, bonusCity.Key, edge.Id, edge.EmissionCost, timeCost);
+                        var fromBonusCityEdge = new EdgeWithId<string>(bonusCity.Key, edge.Source, edge.Id, edge.EmissionCost, edge.TimeCost);
+                        graph.AddEdge(toBonusCityEdge, toBonusCityEdge.GetAlgorithmCost());
+                        graph.AddEdge(fromBonusCityEdge, fromBonusCityEdge.GetAlgorithmCost());
+                    }
+                }
+            }
+
+            graph.BonusVertices = bonusCities;
+
+            return graph;
+        }
+
         public static Graph<string, EdgeWithId<string>> CreateGraphWithBonusCities()
         {
             Graph<string, EdgeWithId<string>> graph = new Graph<string, EdgeWithId<string>>();
@@ -124,39 +196,39 @@ namespace WindowsFormsApp1
             // Add bonus vertices
             Dictionary<string, double> bonusVertices = new Dictionary<string, double>
             {
-                { "London", 379 },
-                { "Kabul", 600 }
+                { "London", 400 },
+                { "Kabul", 800 }
             };
             graph.BonusVertices = bonusVertices;
 
             var walk = "Gå";
             var plane = "Flyg";
             // Create the edges
-            graph.AddEdge(new EdgeWithId<string>("Stockholm", "London", plane), 190);
-            graph.AddEdge(new EdgeWithId<string>("Stockholm", "London" , walk), 1000);
-            graph.AddEdge(new EdgeWithId<string>("Stockholm", "Moskva", plane), 158);
-            graph.AddEdge(new EdgeWithId<string>("Stockholm", "Istanbul", plane), 327);
-            graph.AddEdge(new EdgeWithId<string>("London", "Stockholm", plane), 190);
-            graph.AddEdge(new EdgeWithId<string>("London", "Istanbul", plane), 305);
-            graph.AddEdge(new EdgeWithId<string>("London", "Kairo", plane), 562);
-            graph.AddEdge(new EdgeWithId<string>("Moskva", "Stockholm", plane), 158);
-            graph.AddEdge(new EdgeWithId<string>("Moskva", "Istanbul", plane), 216);
-            graph.AddEdge(new EdgeWithId<string>("Moskva", "Kabul", plane), 411);
-            graph.AddEdge(new EdgeWithId<string>("Istanbul", "Stockholm", plane), 327);
-            graph.AddEdge(new EdgeWithId<string>("Istanbul", "London", plane), 305);
-            graph.AddEdge(new EdgeWithId<string>("Istanbul", "Moskva", plane), 216);
-            graph.AddEdge(new EdgeWithId<string>("Istanbul", "Kairo", plane), 262);
-            graph.AddEdge(new EdgeWithId<string>("Istanbul", "Kabul", plane), 446);
-            graph.AddEdge(new EdgeWithId<string>("Istanbul", "Dubai", plane), 415);
-            graph.AddEdge(new EdgeWithId<string>("Kairo", "London", plane), 562);
-            graph.AddEdge(new EdgeWithId<string>("Kairo", "Istanbul", plane), 262);
-            graph.AddEdge(new EdgeWithId<string>("Kairo", "Dubai", plane), 307);
-            graph.AddEdge(new EdgeWithId<string>("Kabul", "Moskva", plane), 411);
-            graph.AddEdge(new EdgeWithId<string>("Kabul", "Istanbul", plane), 446);
-            graph.AddEdge(new EdgeWithId<string>("Kabul", "Dubai", plane), 412);
-            graph.AddEdge(new EdgeWithId<string>("Dubai", "Istanbul", plane), 415);
-            graph.AddEdge(new EdgeWithId<string>("Dubai", "Kairo", plane), 307);
-            graph.AddEdge(new EdgeWithId<string>("Dubai", "Kabul", plane), 412);
+            graph.AddEdge(new EdgeWithId<string>("Stockholm", "London", plane, 100, 90), 190);
+            graph.AddEdge(new EdgeWithId<string>("Stockholm", "London" , walk, 600, 400), 1000);
+            graph.AddEdge(new EdgeWithId<string>("Stockholm", "Moskva", plane, 100, 58), 158);
+            graph.AddEdge(new EdgeWithId<string>("Stockholm", "Istanbul", plane, 200, 127), 327);
+            graph.AddEdge(new EdgeWithId<string>("London", "Stockholm", plane, 100, 190), 190);
+            graph.AddEdge(new EdgeWithId<string>("London", "Istanbul", plane, 200, 105), 305);
+            graph.AddEdge(new EdgeWithId<string>("London", "Kairo", plane, 300, 262), 562);
+            graph.AddEdge(new EdgeWithId<string>("Moskva", "Stockholm", plane, 100, 58), 158);
+            graph.AddEdge(new EdgeWithId<string>("Moskva", "Istanbul", plane, 150, 66), 216);
+            graph.AddEdge(new EdgeWithId<string>("Moskva", "Kabul", plane, 300, 111), 411);
+            graph.AddEdge(new EdgeWithId<string>("Istanbul", "Stockholm", plane, 200, 127), 327);
+            graph.AddEdge(new EdgeWithId<string>("Istanbul", "London", plane, 200, 105), 305);
+            graph.AddEdge(new EdgeWithId<string>("Istanbul", "Moskva", plane, 150, 66), 216);
+            graph.AddEdge(new EdgeWithId<string>("Istanbul", "Kairo", plane, 150, 112), 262);
+            graph.AddEdge(new EdgeWithId<string>("Istanbul", "Kabul", plane, 300, 146), 446);
+            graph.AddEdge(new EdgeWithId<string>("Istanbul", "Dubai", plane, 300, 115), 415);
+            graph.AddEdge(new EdgeWithId<string>("Kairo", "London", plane, 300, 262), 562);
+            graph.AddEdge(new EdgeWithId<string>("Kairo", "Istanbul", plane, 150, 112), 262);
+            graph.AddEdge(new EdgeWithId<string>("Kairo", "Dubai", plane, 200, 107), 307);
+            graph.AddEdge(new EdgeWithId<string>("Kabul", "Moskva", plane, 300, 111), 411);
+            graph.AddEdge(new EdgeWithId<string>("Kabul", "Istanbul", plane, 300, 146), 446);
+            graph.AddEdge(new EdgeWithId<string>("Kabul", "Dubai", plane, 300, 112), 412);
+            graph.AddEdge(new EdgeWithId<string>("Dubai", "Istanbul", plane, 300, 115), 415);
+            graph.AddEdge(new EdgeWithId<string>("Dubai", "Kairo", plane, 200, 107), 307);
+            graph.AddEdge(new EdgeWithId<string>("Dubai", "Kabul", plane, 300, 112), 412);
 
             graph.Start = start;
             graph.Goal = goal;
@@ -273,36 +345,36 @@ namespace WindowsFormsApp1
             graph.AddVertex("2538475");
             Dictionary<string, double> bonusVertices = new Dictionary<string, double>
             {
-                { "98182", 10000 },
-                { "616052", 10 },
-                { "128747", 10 },
-                { "511196", 10 },
-                { "2507480", 10 },
-                { "792680", 10 },
-                { "115019", 10 },
-                { "170654", 10 },
-                { "479561", 10 },
-                { "99071", 10 },
-                { "2553604", 10 },
-                { "268743", 10 },
-                { "232422", 10 },
-                { "2339354", 10 },
-                { "109223", 10 },
-                { "314830", 10 },
-                { "99532", 10 },
-                { "2422465", 10 },
-                { "2867714", 10 },
-                { "2618425", 10 },
-                { "2761369", 10 },
-                { "2460596", 10 },
-                { "2332459", 10 },
-                { "365137", 10 },
-                { "2324774", 10 },
-                { "361058", 10 },
-                { "750269", 10 },
-                { "360630", 10 },
-                { "2950159", 10 },
-                { "2538475", 10 }
+                { "98182", 1 },
+                { "616052", 1 },
+                { "128747", 1 },
+                { "511196", 1 },
+                { "2507480", 1 },
+                { "792680", 1 },
+                { "115019", 1 },
+                { "170654", 1 },
+                { "479561", 1 },
+                { "99071", 1 },
+                { "2553604", 1 },
+                { "268743", 1 },
+                { "232422", 1 },
+                { "2339354", 1 },
+                { "109223", 1 },
+                { "314830", 1 },
+                { "99532", 1 },
+                { "2422465", 1 },
+                { "2867714", 1 },
+                { "2618425", 1 },
+                { "2761369", 1 },
+                { "2460596", 1 },
+                { "2332459", 1 },
+                { "365137", 1 },
+                { "2324774", 1 },
+                { "361058", 1 },
+                { "750269", 1 },
+                { "360630", 1 },
+                { "2950159", 1 },
+                { "2538475", 1 }
             };
             graph.BonusVertices = bonusVertices;
             var bus = "Buss";
@@ -703,7 +775,6 @@ namespace WindowsFormsApp1
             graph.AddEdge(new EdgeWithId<string>("292223", "360630", bus), 24.437936378037328);
             graph.AddEdge(new EdgeWithId<string>("360630", "2950159", bus), 28.68387490851262);
             graph.AddEdge(new EdgeWithId<string>("2950159", "360630", bus), 28.68387490851262);
-            graph.AddEdge(new EdgeWithId<string>("2673730", "292223", bus), 50.50843990501786);
             graph.AddEdge(new EdgeWithId<string>("292223", "2673730", bus), 50.50843990501786);
             graph.AddEdge(new EdgeWithId<string>("745044", "524901", plane), 34.19460003184128);
             graph.AddEdge(new EdgeWithId<string>("524901", "745044", plane), 34.19460003184128);

@@ -18,6 +18,18 @@ namespace WindowsFormsApp1
         public EdgeWithId(TVertex source, TVertex target, string id, double emissionCost = 0, double timeCost = 0) : base(source, target)
         {
             Id = id;
+            EmissionCost = emissionCost;
+            TimeCost = timeCost;
+        }
+
+        public double GetAlgorithmCost()
+        {
+            return 1 * EmissionCost +  1 * TimeCost;
+        }
+
+        public double GetTrueCost()
+        {
+            return 1 * EmissionCost + 1 * TimeCost;
         }
     }
 }

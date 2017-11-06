@@ -9,7 +9,7 @@ namespace WindowsFormsApp1
         public string Run(GraphvizImageType imageType, string dot, string outputFileName)
         {
             string executable = @"C:\Program Files (x86)\Graphviz2.38\bin\dot.exe";
-            string output = @"C:\Users\Jesper\source\repos\Considition\Considition\bin\Debug\output";
+            string output = @".\output";
             File.WriteAllText(output + ".dot", dot);
 
             System.Diagnostics.Process process = new System.Diagnostics.Process();
