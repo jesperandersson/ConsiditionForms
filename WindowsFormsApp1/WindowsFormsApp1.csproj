@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompositeEdge.cs" />
+    <Compile Include="CompositeGraph.cs" />
     <Compile Include="EdgeWithId.cs" />
     <Compile Include="FileDotEngine.cs" />
     <Compile Include="Form1.cs">
@@ -69,6 +70,7 @@
     <Compile Include="Graph.cs" />
     <Compile Include="GraphCreator.cs" />
     <Compile Include="GraphDrawer.cs" />
+    <Compile Include="GraphNegativeCycleRemover.cs" />
     <Compile Include="GraphReducer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

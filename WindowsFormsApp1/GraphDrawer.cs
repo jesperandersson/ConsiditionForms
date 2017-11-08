@@ -32,7 +32,7 @@ namespace WindowsFormsApp1
         private void OnFormatVertex(object sender, FormatVertexEventArgs<TVertex> v)
         {
             v.VertexFormatter.Label = v.Vertex.ToString();
-            if (Path.ContainsVertex(v.Vertex))
+            if (Path != null && Path.ContainsVertex(v.Vertex))
             {
                 v.VertexFormatter.Shape = GraphvizVertexShape.Box;
             }
@@ -41,7 +41,7 @@ namespace WindowsFormsApp1
         private void OnFormatEdge(object obj, FormatEdgeEventArgs<TVertex, TEdge> e)
         {
             e.EdgeFormatter.Label.Value = Graph.EdgeCosts[e.Edge].ToString();
-            if (Path.ContainsEdge(e.Edge))
+            if (Path != null && Path.ContainsEdge(e.Edge))
             {
                 e.EdgeFormatter.Style = GraphvizEdgeStyle.Bold;
             } else

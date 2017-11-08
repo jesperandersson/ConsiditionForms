@@ -28,14 +28,25 @@ namespace WindowsFormsApp1
 
         public static void TestShortestPathAndDrawGraph()
         {
-            Graph<string, EdgeWithId<string>> graph = GraphCreator.ParseGraph("C:\\Users\\Jesper\\Downloads\\Considition\\cities\\graph.txt");
+            Graph<string, EdgeWithId<string>> graph = GraphCreator.CreateGraphWithBonusCities();
 
             Graph<string, CompositeEdge<string>> reducedGraph = GraphReducer<string>.CreateReducedGraph(graph);
-            TryFunc<string, IEnumerable<CompositeEdge<string>>> tryGetPaths = reducedGraph.getAllShortestPathBellmanFord(graph.Start);
 
             string target = graph.Goal;
             IEnumerable<CompositeEdge<string>> path;
 
+            TryFunc<string, IEnumerable<CompositeEdge<string>>> tryGetPaths;
+            CompositeGraph<string, CompositeEdge<string>> compositeGraph = null;
+            if (Properties.Settings.Default.removeNegativeCyclesByAddingNodes)
+            {
+                compositeGraph = GraphNegativeCycleRemover<string>.RemoveNegativeCyclesByAddingNodes(reducedGraph);
+                tryGetPaths = compositeGraph.getAllShortestPathBellmanFord(graph.Start);
+            }
+            else
+            {
+                tryGetPaths = reducedGraph.getAllShortestPathBellmanFord(graph.Start);
+            }
+            
             if (tryGetPaths(target, out path))
             {
                 var fullPath = new List<EdgeWithId<string>>();
@@ -43,7 +54,24 @@ namespace WindowsFormsApp1
                 {
                     foreach (var edge in compPath.ComponentEdges)
                     {
-                        fullPath.Add(edge);
+                        if (Properties.Settings.Default.removeNegativeCyclesByAddingNodes)
+                        {
+                            if (compositeGraph.InnerPath.Keys.Contains(edge.Source))
+                            {
+                                fullPath.AddRange(compositeGraph.InnerPath[edge.Source].ComponentEdges);
+                            }
+
+                            fullPath.Add(edge);
+
+                            if (compositeGraph.InnerPath.Keys.Contains(edge.Target))
+                            {
+                                fullPath.AddRange(compositeGraph.InnerPath[edge.Target].ComponentEdges);
+                            }
+                        }
+                        else
+                        {
+                            fullPath.Add(edge);
+                        }
                     }
                 }
 

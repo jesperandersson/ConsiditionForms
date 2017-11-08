@@ -32,6 +32,15 @@ namespace WindowsFormsApp1
             BonusVertices = new Dictionary<TVertex, double>();
         }
 
+        public Graph(Graph<TVertex,TEdge> graph)
+        {
+            AdjacencyGraph = graph.AdjacencyGraph;
+            EdgeCosts = graph.EdgeCosts;
+            BonusVertices = graph.BonusVertices;
+            Start = graph.Start;
+            Goal = graph.Goal;
+        }
+
         public void AddVertex(TVertex v)
         {
             AdjacencyGraph.AddVertex(v);
